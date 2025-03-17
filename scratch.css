@@ -1,0 +1,156 @@
+/* Reset some default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body {
+    background-color: #F0F2F5; /*Background for the entire website */
+    color: #333333; /* Text color */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  /* 3-row layout using CSS Grid */
+  body {
+    display: grid;
+    grid-template-rows: auto 1fr auto auto;
+    min-height: 100vh;
+    background-color: #85bdf5;
+    color:#3498DB;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding:0;
+  }
+  
+  header {
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    background-color: #2C3E50;
+    border-bottom: 3px solid #ffffff;
+    gap: 1rem; 
+  }
+  
+  header .store-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    flex: 1; 
+  }
+  
+  header nav {
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 1rem; 
+  }
+  
+  header nav a {
+    text-decoration: none;
+    color: #3498DB;
+    font-size: 1rem;
+    white-space: nowrap; 
+  }
+  
+  header nav a:hover {
+    text-decoration: underline;
+  }
+  
+  main {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); 
+    gap: 1rem; 
+    padding: 1rem;
+    box-sizing: border-box;
+    width: 100%;
+    height: fit-content;
+    overflow: hidden; /* Prevent horizontal and vertical scrolling */
+  }
+  
+  .score {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: 1fr auto;
+    border: 1px solid #ffffff;
+    padding: 4px;
+    background-color: #ffffff;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: 100%; /* Ensure all items have the same height */
+    width: 100%; /* Ensure all items have the same width */
+    box-sizing: border-box;
+    font-size: 1rem;
+  }
+  .inline-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Vertically center the items */
+    gap: 0.5rem; /* Add space between h2 and p */
+  }
+  .inline-content h2,
+  .inline-content p {
+    align-items: center;
+  }
+  
+  #ones, #threes, #fives, #duo, #quad, 
+  #dragon_claw, #straight, #chance{
+    background-color: rgb(52, 52, 53);
+  }
+  #twos, #fours, #sixes, #triple,
+  #den_o_wolf, #yar, #full_house{
+    background-color: rgb(63, 87, 85);
+  }
+
+  .container {
+    display: flex;
+    align-items: center; /* Align items vertically in the middle */
+    gap: 1rem; /* Add space between items */
+  }
+
+  .store-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* Set a fixed height for the container */
+    border: 1px solid #85bdf5;
+    background-color: #85bdf5;
+    border-radius: 8px;
+    /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
+    overflow: hidden; /* Prevent image overflow */
+  }
+
+  .store-item img {
+    max-width: 100%; /* Ensure the image doesn't exceed the container width */
+    max-height: 100%; /* Ensure the image doesn't exceed the container height */
+    border-radius: 8px;
+  }
+  
+  .reroll-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%; /* Make it span the full width */
+    margin-top: 1rem; /* Adjust spacing if needed */
+  }
+
+  .reroll {
+    padding: 1rem;
+    background-color: #2C3E50;
+    border: 3px solid #ffffff;
+    font-size: 0.9rem;
+    color: #3498DB;
+    text-align: center;
+  }
+
+
+  footer {
+    text-align: center;
+    padding: 1rem;
+    grid-area: footer;
+    background-color: #2C3E50;
+    border-top: 3px solid #ffffff;
+    font-size: 0.9rem;
+    color: #3498DB;
+  }
