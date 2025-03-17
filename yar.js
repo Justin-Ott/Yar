@@ -59,7 +59,7 @@ const cardImages = [
     const scoreIds = [
       "ones_button", "twos_button", "threes_button", "fours_button", "fives_button", "sixes_button",
       "duo_button", "triple_button", "quad_button", "den_o_wolf_button", "dragon_claw_button", 
-      "yar_button", "straight_button", "full_house_button", "chance_button"
+      "yar_button", "straight_button", "full_house_button", "chance_button", "total_button"
     ];
   
     // Get all card elements
@@ -82,7 +82,8 @@ const cardImages = [
       yar: 0,
       straight: 0,
       full_house: 0,
-      chance: 0
+      chance: 0,
+      total: 0
     };
   
     // Create a frequency map to count occurrences of each value
@@ -227,6 +228,13 @@ const cardImages = [
     }
   });
 
+  for (const key in scores) {
+    if (scores.hasOwnProperty(key) && key !== "total") { // Skip the "total" key
+      const value = scores[key];
+      scores.total += value; // Add the value to the total
+    }
+  }
+
   // Step 4: Update the DOM with the calculated scores
   scoreIds.forEach(id => {
     const scoreElement = document.getElementById(id);
@@ -239,6 +247,8 @@ const cardImages = [
       console.error(`Element with id "${id}" not found.`); // Debugging
     }
   });
+
+  
 }
   
   // Update card images on page load

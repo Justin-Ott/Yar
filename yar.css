@@ -111,7 +111,8 @@ main {
 }
 
 #twos, #fours, #sixes, #triple,
-#den_o_wolf, #yar, #full_house {
+#den_o_wolf, #yar, #full_house,
+#total {
   background-color: rgb(255, 170, 68);
 }
 
