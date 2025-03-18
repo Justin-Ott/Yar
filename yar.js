@@ -1,11 +1,8 @@
 // Array of card image paths
 const cardImages = [
-    "C:/Users/sgtjd/.AVisualStudioProjects/Try to Yar/Cards/two_of_clubs.png",
-    "C:/Users/sgtjd/.AVisualStudioProjects/Try to Yar/Cards/three_of_clubs.png",
-    "C:/Users/sgtjd/.AVisualStudioProjects/Try to Yar/Cards/four_of_clubs.png",
-    "C:/Users/sgtjd/.AVisualStudioProjects/Try to Yar/Cards/five_of_clubs.png",
-    "C:/Users/sgtjd/.AVisualStudioProjects/Try to Yar/Cards/six_of_clubs.png",
-    "C:/Users/sgtjd/.AVisualStudioProjects/Try to Yar/Cards/ace_of_clubs.png",
+    "Cards/two_of_clubs.png",  "Cards/three_of_clubs.png",
+    "Cards/four_of_clubs.png", "Cards/five_of_clubs.png",
+    "Cards/six_of_clubs.png",  "Cards/ace_of_clubs.png",
     // Add more card image paths as needed
 ];
 
@@ -35,17 +32,17 @@ function cardTotals() {
         if (cardElement) {
             const src = cardElement.src; // Get the src attribute of the image
 
-            if (src.includes("ace_of_clubs.png")) {
+            if (src.includes("ace")) {
                 cardElement.setAttribute("value", 1);
-            } else if (src.includes("two_of_clubs.png")) {
+            } else if (src.includes("two")) {
                 cardElement.setAttribute("value", 2);
-            } else if (src.includes("three_of_clubs.png")) {
+            } else if (src.includes("three")) {
                 cardElement.setAttribute("value", 3);
-            } else if (src.includes("four_of_clubs.png")) {
+            } else if (src.includes("four")) {
                 cardElement.setAttribute("value", 4);
-            } else if (src.includes("five_of_clubs.png")) {
+            } else if (src.includes("five")) {
                 cardElement.setAttribute("value", 5);
-            } else if (src.includes("six_of_clubs.png")) {
+            } else if (src.includes("six")) {
                 cardElement.setAttribute("value", 6);
             }
 
@@ -58,7 +55,7 @@ function updateScores() {
     const scoreIds = [
         "ones_button", "twos_button", "threes_button", "fours_button", "fives_button", "sixes_button",
         "duo_button", "triple_button", "quad_button", "den_o_wolf_button", "dragon_claw_button",
-        "yar_button", "straight_button", "full_house_button", "chance_button", "total_button"
+        "yar_button", "straight_button", "full_house_button", "chance_button", "total_button",
     ];
 
     // Get all card elements
@@ -249,6 +246,7 @@ function updateScores() {
             console.error(`Element with id "${id}" not found.`); // Debugging
         }
     });
+
 }
 
 // Function to lock a button when clicked
@@ -256,19 +254,27 @@ function lockButton(event) {
     const button = event.target;
     button.setAttribute("data-locked", "true");
     button.removeEventListener("click", lockButton); // Remove the event listener after locking
+    rerollCount = 0;
+    const element = document.getElementById("reroll_count");
+        element.textContent = 3-rerollCount;  
+    console.log("Reroll counter reset.");
 }
+
+var rerollCount = 0;
 
 // Update card images on page load
 window.onload = () => {
     updateCardImages();
     cardTotals();
     updateScores();
+    const element = document.getElementById("reroll_count");
+        element.textContent = 3-rerollCount;  
 
     // Add event listeners to the score buttons to lock them when clicked
     const scoreIds = [
         "ones_button", "twos_button", "threes_button", "fours_button", "fives_button", "sixes_button",
         "duo_button", "triple_button", "quad_button", "den_o_wolf_button", "dragon_claw_button",
-        "yar_button", "straight_button", "full_house_button", "chance_button", "total_button"
+        "yar_button", "straight_button", "full_house_button", "chance_button", "total_button",
     ];
     scoreIds.forEach(id => {
         const button = document.getElementById(id);
@@ -280,7 +286,16 @@ window.onload = () => {
 
 // Add event listener to the reroll button
 document.getElementById("reroll").addEventListener("click", () => {
-    updateCardImages();
-    cardTotals();
-    updateScores();
-});
+    if (rerollCount < 3) { // Only allow rerolls if the count is less than 3
+        updateCardImages();
+        cardTotals();
+        updateScores();
+        rerollCount++; // Increment the reroll counter
+        console.log(`Reroll count: ${rerollCount}`);
+        const element = document.getElementById("reroll_count");
+            element.textContent = 3-rerollCount;   
+    } else {
+        console.log("No remaining rerolls")
+    }
+    }
+);
