@@ -150,6 +150,33 @@ main {
   cursor: pointer; /* Add pointer cursor to the card buttons */
 }
 
+#game-over-screen {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  z-index: 1000;
+}
+
+#reset-game-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+#reset-game-button:hover {
+  background-color: #45a049;
+}
+
 .reroll-container {
   display: flex;
   pointer-events: auto;

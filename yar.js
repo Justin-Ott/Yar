@@ -28,6 +28,15 @@ function updateCardImages() {
     });
 }
 
+function areAllScoresLocked() {
+    for (const key in scoresLocked) {
+        if (key !== "total" && scoresLocked[key] === false) {
+            return false; // At least one score is not locked
+        }
+    }
+    return true; // All scores are locked
+}
+
 function cardTotals() {
     const cardIds = ["card1", "card2", "card3", "card4", "card5"];
     cardIds.forEach((id) => {
@@ -58,24 +67,24 @@ function cardTotals() {
         }
     });
 }
-    var scoresLocked = {
-        ones: 0,
-        twos: 0,
-        threes: 0,
-        fours: 0,
-        fives: 0,
-        sixes: 0,
-        duo: 0,
-        triple: 0,
-        quad: 0,
-        den_o_wolf: 0,
-        dragon_claw: 0,
-        yar: 0,
-        straight: 0,
-        full_house: 0,
-        chance: 0,
-        total: 0
-    };
+const scoresLocked = {
+    ones: false,
+    twos: false,
+    threes: false,
+    fours: false,
+    fives: false,
+    sixes: false,
+    duo: false,
+    triple: false,
+    quad: false,
+    den_o_wolf: false,
+    dragon_claw: false,
+    yar: false,
+    straight: false,
+    full_house: false,
+    chance: false,
+    total: 0
+};
 
     const lockedCards = {
         card1: false,
@@ -300,6 +309,25 @@ function lockButton(event) {
     const scoreValue = parseInt(button.textContent, 10);
     if (!isNaN(scoreValue)) {
         scoresLocked[scoreKey] = scoreValue;
+
+        // Update the total score
+        scoresLocked.total = 0; // Reset the total
+        for (const key in scoresLocked) {
+            if (key !== "total" && scoresLocked[key] !== false) {
+                scoresLocked.total += scoresLocked[key]; // Add the locked score to the total
+            }
+        }
+    }
+
+    // Check if all scores are locked
+    if (areAllScoresLocked()) {
+        // Display the game over screen
+        const gameOverScreen = document.getElementById("game-over-screen");
+        gameOverScreen.style.display = "block";
+
+        // Update the total score display
+        const totalScoreDisplay = document.getElementById("total-score-display");
+        totalScoreDisplay.textContent = `You scored ${scoresLocked.total}`; // Insert the total score
     }
 
     // Unlock and update cards when the score button is locked
@@ -318,10 +346,9 @@ function lockButton(event) {
                                  src.includes("six_locked") ? 6 : null;
 
                 // Check if the card value matches the score button
-                if (cardValue !== null && scoreKey === `${cardValue}s`) {
+                if (cardValue !== null ) {
                     lockedCards[id] = false; // Unlock the card
-                    imgElement.src = `Cards/${cardValue}.png`; // Replace with the unlocked image
-                    buttonElement.addEventListener("click", lockCard); // Re-enable the click event listener
+                    imgElement.src = `Cards/${cardValue}_of_clubs.png`; // Replace with the unlocked image
                 }
             }
         }
@@ -344,12 +371,16 @@ var rerollCount = 0;
 // Update card images on page load
 // Function to lock a card
 function lockCard(event) {
-    const buttonElement = event.currentTarget; // Get the button
-    const imgElement = buttonElement.querySelector("img"); // Get the <img> inside the button
-    const cardId = buttonElement.id; // Get the card ID (e.g., "card1", "card2")
+    const buttonElement = event.currentTarget;
+    const imgElement = buttonElement.querySelector("img");
+    const cardId = buttonElement.id;
 
-    if (!lockedCards[cardId]) { // Check if the card is not already locked
-        const src = imgElement.src; // Get the current image source
+    console.log("Card ID:", cardId);
+    console.log("Locked state:", lockedCards[cardId]);
+
+    if (!lockedCards[cardId]) {
+        console.log("Locking card:", cardId);
+        const src = imgElement.src;
         const cardValue = src.includes("ace") ? "ace" :
                          src.includes("two") ? "two" :
                          src.includes("three") ? "three" :
@@ -358,9 +389,22 @@ function lockCard(event) {
                          src.includes("six") ? "six" : null;
 
         if (cardValue !== null) {
-            imgElement.src = `Cards/${cardValue}_locked.png`; // Replace with the locked image
+            imgElement.src = `Cards/${cardValue}_locked.png`;
             lockedCards[cardId] = true; // Lock the card
-            buttonElement.removeEventListener("click", lockCard); // Remove the click event listener
+        }
+    } else {
+        console.log("Unlocking card:", cardId);
+        const src = imgElement.src;
+        const cardValue = src.includes("ace_locked") ? "ace" :
+                         src.includes("two_locked") ? "two" :
+                         src.includes("three_locked") ? "three" :
+                         src.includes("four_locked") ? "four" :
+                         src.includes("five_locked") ? "five" :
+                         src.includes("six_locked") ? "six" : null;
+
+        if (cardValue !== null) {
+            imgElement.src = `Cards/${cardValue}_of_clubs.png`;
+            lockedCards[cardId] = false; // Unlock the card
         }
     }
 }
@@ -411,3 +455,49 @@ document.getElementById("reroll").addEventListener("click", () => {
     }
     }
 );
+
+document.getElementById("reset-game-button").addEventListener("click", () => {
+    // Hide the game over screen
+    const gameOverScreen = document.getElementById("game-over-screen");
+    gameOverScreen.style.display = "none";
+
+    // Reset the scoresLocked object
+    for (const key in scoresLocked) {
+        if (key !== "total" ){
+            scoresLocked[key] = false;
+        } else{
+            scoresLocked[key] = 0;
+        }
+    }
+
+    // Reset the lockedCards object
+    const cardIds = ["card1", "card2", "card3", "card4", "card5"];
+    cardIds.forEach((id) => {
+        lockedCards[id] = false;
+    });
+
+    // Reset the score buttons
+    const scoreIds = [
+        "ones_button", "twos_button", "threes_button", "fours_button", "fives_button", "sixes_button",
+        "duo_button", "triple_button", "quad_button", "den_o_wolf_button", "dragon_claw_button",
+        "yar_button", "straight_button", "full_house_button", "chance_button"
+    ];
+    scoreIds.forEach((id) => {
+        const button = document.getElementById(id);
+        if (button) {
+            button.setAttribute("data-locked", "false");
+            button.style.backgroundColor = ""; // Reset button color
+            button.addEventListener("click", lockButton); // Re-enable the click event listener
+        }
+    });
+
+    // Reset the cards
+    updateCardImages();
+    cardTotals();
+    updateScores();
+
+    // Reset the reroll counter
+    rerollCount = 0;
+    const element = document.getElementById("reroll_count");
+    element.textContent = 3 - rerollCount;
+});
