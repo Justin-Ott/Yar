@@ -16,9 +16,12 @@ function getRandomImage() {
 function updateCardImages() {
     const cardIds = ["card1", "card2", "card3", "card4", "card5"];
     cardIds.forEach((id) => {
-        const cardElement = document.getElementById(id);
-        if (cardElement) {
-            cardElement.src = getRandomImage();
+        const buttonElement = document.getElementById(id); // Get the button
+        if (buttonElement) {
+            const imgElement = buttonElement.querySelector("img"); // Get the <img> inside the button
+            if (imgElement && !lockedCards[id]) { // Skip if the card is locked
+                imgElement.src = getRandomImage(); // Update the <img> src
+            }
         } else {
             console.error(`Element with id "${id}" not found.`);
         }
@@ -28,28 +31,59 @@ function updateCardImages() {
 function cardTotals() {
     const cardIds = ["card1", "card2", "card3", "card4", "card5"];
     cardIds.forEach((id) => {
-        const cardElement = document.getElementById(id);
-        if (cardElement) {
-            const src = cardElement.src; // Get the src attribute of the image
+        const buttonElement = document.getElementById(id); // Get the button
+        if (buttonElement) {
+            const imgElement = buttonElement.querySelector("img"); // Get the <img> inside the button
+            if (imgElement && !lockedCards[id]) { // Skip if the card is locked
+                const src = imgElement.src; // Get the src attribute of the image
 
-            if (src.includes("ace")) {
-                cardElement.setAttribute("value", 1);
-            } else if (src.includes("two")) {
-                cardElement.setAttribute("value", 2);
-            } else if (src.includes("three")) {
-                cardElement.setAttribute("value", 3);
-            } else if (src.includes("four")) {
-                cardElement.setAttribute("value", 4);
-            } else if (src.includes("five")) {
-                cardElement.setAttribute("value", 5);
-            } else if (src.includes("six")) {
-                cardElement.setAttribute("value", 6);
+                if (src.includes("ace")) {
+                    imgElement.setAttribute("value", 1);
+                } else if (src.includes("two")) {
+                    imgElement.setAttribute("value", 2);
+                } else if (src.includes("three")) {
+                    imgElement.setAttribute("value", 3);
+                } else if (src.includes("four")) {
+                    imgElement.setAttribute("value", 4);
+                } else if (src.includes("five")) {
+                    imgElement.setAttribute("value", 5);
+                } else if (src.includes("six")) {
+                    imgElement.setAttribute("value", 6);
+                }
+
+                console.log(`Card ${id} value: ${imgElement.getAttribute("value")}`);
             }
-
-            console.log(`Card ${id} value: ${cardElement.getAttribute("value")}`);
+        } else {
+            console.error(`Element with id "${id}" not found.`);
         }
     });
 }
+    var scoresLocked = {
+        ones: 0,
+        twos: 0,
+        threes: 0,
+        fours: 0,
+        fives: 0,
+        sixes: 0,
+        duo: 0,
+        triple: 0,
+        quad: 0,
+        den_o_wolf: 0,
+        dragon_claw: 0,
+        yar: 0,
+        straight: 0,
+        full_house: 0,
+        chance: 0,
+        total: 0
+    };
+
+    const lockedCards = {
+        card1: false,
+        card2: false,
+        card3: false,
+        card4: false,
+        card5: false
+    };
 
 function updateScores() {
     const scoreIds = [
@@ -60,7 +94,13 @@ function updateScores() {
 
     // Get all card elements
     const cardIds = ["card1", "card2", "card3", "card4", "card5"];
-    const cardElements = cardIds.map(id => document.getElementById(id));
+    const cardElements = cardIds.map(id => {
+        const buttonElement = document.getElementById(id); // Get the button
+        if (buttonElement) {
+            return buttonElement.querySelector("img"); // Return the <img> inside the button
+        }
+        return null;
+    });
 
     // Initialize scores for each category
     const scores = {
@@ -85,9 +125,9 @@ function updateScores() {
     // Create a frequency map to count occurrences of each value
     const frequencyMap = {};
     const cardValues = [];
-    cardElements.forEach(cardElement => {
-        if (cardElement) {
-            const value = parseInt(cardElement.getAttribute("value"), 10);
+    cardElements.forEach(imgElement => {
+        if (imgElement) {
+            const value = parseInt(imgElement.getAttribute("value"), 10);
             if (!isNaN(value)) {
                 frequencyMap[value] = (frequencyMap[value] || 0) + 1;
                 cardValues.push(value);
@@ -224,10 +264,9 @@ function updateScores() {
         }
     });
 
-    for (const key in scores) {
-        if (scores.hasOwnProperty(key) && key !== "total") { // Skip the "total" key
-            const value = scores[key];
-            scores.total += value; // Add the value to the total
+    for (const key in scoresLocked) {
+        if (scoresLocked.hasOwnProperty(key) && key !== "total") {
+            scores.total += scoresLocked[key];
         }
     }
 
@@ -246,40 +285,113 @@ function updateScores() {
             console.error(`Element with id "${id}" not found.`); // Debugging
         }
     });
-
 }
 
+// Function to lock a button when clicked
 // Function to lock a button when clicked
 function lockButton(event) {
     const button = event.target;
     button.setAttribute("data-locked", "true");
     button.removeEventListener("click", lockButton); // Remove the event listener after locking
+    button.style.backgroundColor = "yellow";
+
+    // Update the locked score in scoresLocked
+    const scoreKey = button.id.replace("_button", "");
+    const scoreValue = parseInt(button.textContent, 10);
+    if (!isNaN(scoreValue)) {
+        scoresLocked[scoreKey] = scoreValue;
+    }
+
+    // Unlock and update cards when the score button is locked
+    const cardIds = ["card1", "card2", "card3", "card4", "card5"];
+    cardIds.forEach((id) => {
+        const buttonElement = document.getElementById(id);
+        if (buttonElement) {
+            const imgElement = buttonElement.querySelector("img");
+            if (imgElement && lockedCards[id]) {
+                const src = imgElement.src;
+                const cardValue = src.includes("ace_locked") ? 1 :
+                                 src.includes("two_locked") ? 2 :
+                                 src.includes("three_locked") ? 3 :
+                                 src.includes("four_locked") ? 4 :
+                                 src.includes("five_locked") ? 5 :
+                                 src.includes("six_locked") ? 6 : null;
+
+                // Check if the card value matches the score button
+                if (cardValue !== null && scoreKey === `${cardValue}s`) {
+                    lockedCards[id] = false; // Unlock the card
+                    imgElement.src = `Cards/${cardValue}.png`; // Replace with the unlocked image
+                    buttonElement.addEventListener("click", lockCard); // Re-enable the click event listener
+                }
+            }
+        }
+    });
+
+    // Update card images and totals after unlocking cards
+    updateCardImages();
+    cardTotals();
+    updateScores();
+
+    // Reset the reroll counter
     rerollCount = 0;
     const element = document.getElementById("reroll_count");
-        element.textContent = 3-rerollCount;  
+    element.textContent = 3 - rerollCount;
     console.log("Reroll counter reset.");
 }
 
 var rerollCount = 0;
 
 // Update card images on page load
+// Function to lock a card
+function lockCard(event) {
+    const buttonElement = event.currentTarget; // Get the button
+    const imgElement = buttonElement.querySelector("img"); // Get the <img> inside the button
+    const cardId = buttonElement.id; // Get the card ID (e.g., "card1", "card2")
+
+    if (!lockedCards[cardId]) { // Check if the card is not already locked
+        const src = imgElement.src; // Get the current image source
+        const cardValue = src.includes("ace") ? "ace" :
+                         src.includes("two") ? "two" :
+                         src.includes("three") ? "three" :
+                         src.includes("four") ? "four" :
+                         src.includes("five") ? "five" :
+                         src.includes("six") ? "six" : null;
+
+        if (cardValue !== null) {
+            imgElement.src = `Cards/${cardValue}_locked.png`; // Replace with the locked image
+            lockedCards[cardId] = true; // Lock the card
+            buttonElement.removeEventListener("click", lockCard); // Remove the click event listener
+        }
+    }
+}
+
+// Add event listeners to the cards on page load
 window.onload = () => {
     updateCardImages();
     cardTotals();
     updateScores();
     const element = document.getElementById("reroll_count");
-        element.textContent = 3-rerollCount;  
+    element.textContent = 3 - rerollCount;
 
     // Add event listeners to the score buttons to lock them when clicked
     const scoreIds = [
         "ones_button", "twos_button", "threes_button", "fours_button", "fives_button", "sixes_button",
         "duo_button", "triple_button", "quad_button", "den_o_wolf_button", "dragon_claw_button",
-        "yar_button", "straight_button", "full_house_button", "chance_button", "total_button",
+        "yar_button", "straight_button", "full_house_button", "chance_button"
     ];
     scoreIds.forEach(id => {
         const button = document.getElementById(id);
         if (button) {
             button.addEventListener("click", lockButton);
+        }
+    });
+
+    // Add event listeners to the cards to lock them when clicked
+    const cardIds = ["card1", "card2", "card3", "card4", "card5"];
+    cardIds.forEach(id => {
+        const button = document.getElementById(id);
+        if (button) {
+            button.addEventListener("click", lockCard);
         }
     });
 };
