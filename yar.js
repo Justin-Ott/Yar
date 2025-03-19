@@ -188,14 +188,23 @@ function updateScores() {
     } else {
         scores.den_o_wolf = 0; // Reset dragon claw score
     }
+    let tripletValue = null;
+    let pairValue = null;
+
     for (const value in frequencyMap) {
-        if (duos.length >= 2) {
-            if (frequencyMap[value] >= 3) {
-                scores.dragon_claw = 35; // Update dragon claw score
-            } else {
-                scores.dragon_claw = 0; // Reset dragon claw score
-            }
+        if (frequencyMap[value] >= 3) {
+            tripletValue = value; // Found a triplet
         }
+        if (frequencyMap[value] >= 2 && value !== tripletValue) {
+            pairValue = value; // Found a pair that is not part of the triplet
+        }
+    }
+
+    // Dragon Claw requires both a triplet and a distinct pair
+    if (tripletValue !== null && pairValue !== null) {
+        scores.dragon_claw = 35; // Update dragon claw score
+    } else {
+        scores.dragon_claw = 0; // Reset dragon claw score
     }
 
     // Sort card values in ascending order
