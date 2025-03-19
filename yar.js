@@ -337,6 +337,10 @@ function lockButton(event) {
         // Update the total score display
         const totalScoreDisplay = document.getElementById("total-score-display");
         totalScoreDisplay.textContent = `You scored ${scoresLocked.total}`; // Insert the total score
+
+        // Show the white overlay
+        const whiteOverlay = document.getElementById("white-overlay");
+        whiteOverlay.style.display = "block";
     }
 
     // Unlock and update cards when the score button is locked
@@ -469,6 +473,10 @@ document.getElementById("reset-game-button").addEventListener("click", () => {
     // Hide the game over screen
     const gameOverScreen = document.getElementById("game-over-screen");
     gameOverScreen.style.display = "none";
+
+    // Hide the white overlay
+    const whiteOverlay = document.getElementById("white-overlay");
+    whiteOverlay.style.display = "none";
 
     // Reset the scoresLocked object
     for (const key in scoresLocked) {

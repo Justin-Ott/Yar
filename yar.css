@@ -160,7 +160,18 @@ main {
   padding: 20px;
   border-radius: 10px;
   text-align: center;
-  z-index: 1000;
+  z-index: 8000;
+}
+
+#white-overlay {
+  position: fixed; /* Cover the entire screen */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(235, 190, 123); /* White background */
+  z-index: 7000; /* Ensure it's on top of everything */
+  pointer-events: none; /* Allow clicks to pass through */
 }
 
 #reset-game-button {
