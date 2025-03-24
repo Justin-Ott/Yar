@@ -332,7 +332,7 @@ function lockButton(event) {
         totalScoreDisplay.textContent = `You scored ${scoresLocked.total}`; // Insert the total score
 
         // Show the white overlay
-        const whiteOverlay = document.getElementById("white-overlay");
+        const whiteOverlay = document.getElementById("background-overlay");
         whiteOverlay.style.display = "block";
     }
 
@@ -468,7 +468,7 @@ document.getElementById("reset-game-button").addEventListener("click", () => {
     gameOverScreen.style.display = "none";
 
     // Hide the white overlay
-    const whiteOverlay = document.getElementById("white-overlay");
+    const whiteOverlay = document.getElementById("background-overlay");
     whiteOverlay.style.display = "none";
 
     // Reset the scoresLocked object

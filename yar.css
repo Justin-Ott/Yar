@@ -6,8 +6,9 @@
 }
 
 body {
-  background-color: #4e91f5; /* Background for the entire website */
-  color: #3498DB; /* Text color */
+  /* Entire website design*/
+  background-color: #4e91f5; 
+  color: #3498DB; 
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
@@ -17,6 +18,7 @@ body {
 }
 
 header {
+  /* Header display design*/
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -50,9 +52,10 @@ header nav a:hover {
   text-decoration: underline;
 }
 .main-container {
+  /* Formats scores and cards*/
   display: grid;
-  grid-template-columns: 1fr 5fr; /* Adjust the ratio as needed */
-  gap: 1rem; /* Add space between scores and cards */
+  grid-template-columns: 1fr 5fr; /* Adjusts the ratio as needed */
+  gap: 1rem; /* Gap between scores and cards*/
 }
 
 main {
@@ -68,11 +71,12 @@ main {
 
 .scores-container {
   display: grid;
-  grid-template-columns: repeat(1, 1fr); /* 3 columns for scores */
+  grid-template-columns: repeat(1, 1fr); /* Columns for scores */
   gap: 1rem;
 }
 
 .score {
+  /* Scoreboard display design*/
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -83,17 +87,18 @@ main {
   background-color: #ffffff;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  height: 100%; /* Ensure all items have the same height */
-  width: 100%; /* Ensure all items have the same width */
+  height: 100%; /* All items have the same height */
+  width: 100%; /* All items have the same width */
   box-sizing: border-box;
   font-size: 1rem;
 }
 
 .inline-content {
+  /* Allows for the score text and score value to be inline*/
   display: flex;
   justify-content: space-between;
   align-items: center; /* Vertically center the items */
-  gap: 0.5rem; /* Add space between h2 and p */
+  gap: 0.5rem; /* Add space between h2(text) and p(score) */
 }
 
 .inline-content h2,
@@ -102,55 +107,64 @@ main {
 }
 
 .inline-content h2:hover {
-  cursor: default; /* Set cursor to default (arrow) */
+  /* Ensures cursor is default(arrow) when hovering the text*/
+  cursor: default; 
 }
 
 #ones, #threes, #fives, #duo, #quad, 
 #dragon_claw, #straight, #chance {
+  /* Creates an alternating color scoreboard*/
   background-color: rgb(255, 180, 128);
 }
 
 #twos, #fours, #sixes, #triple,
 #den_o_wolf, #yar, #full_house,
 #total {
+  /* Creates an alternating color scoreboard*/
   background-color: rgb(255, 170, 68);
 }
 
 #ones_button, #twos_button,  #threes_button, #fours_button, #fives_button, #sixes_button,
  #duo_button, #triple_button, #quad_button, #den_o_wolf_button, #dragon_claw_button , 
  #yar_button, #straight_button, #full_house_button, #chance_button {
-  cursor: pointer; /* Add this line */
+  /* Ensures cursor is pointer when hovering the score button */
+  cursor: pointer; 
 }
 
 .cards-container {
+  /* Card display design */
   display: flex;
-  align-items: center; /* Align items vertically in the middle */
-  gap: 1rem; /* Add space between items */
+  align-items: center; /* Align cards vertically in the middle */
+  gap: 1rem; /* Add space between cards */
 }
 
-.store-item {
+.cards-png {
+  /* Card pngs display design */
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%; /* Set a fixed height for the container */
+  height: 100%; 
   border: 1px solid #4e91f5;
   background-color: #4e91f5;
   border-radius: 8px;
   overflow: hidden; /* Prevent image overflow */
 }
 
-.store-item img {
-  display: block; /* Fixes the gap */
+.cards-png img {
+  /* Allows for card png to fit inside it's block */
+  display: block;
   max-width: 100%;
   max-height: 100%;
   border-radius: 8px;
 }
 
-.store-item button {
-  cursor: pointer; /* Add pointer cursor to the card buttons */
+.cards-png button {
+  /* Ensures cursor is pointer when hovering the cards */
+  cursor: pointer; 
 }
 
 #game-over-screen {
+  /* Game over screen display design */
   position: fixed;
   top: 50%;
   left: 50%;
@@ -163,18 +177,20 @@ main {
   z-index: 8000;
 }
 
-#white-overlay {
-  position: fixed; /* Cover the entire screen */
+#background-overlay {
+  /* Lets the game over screen be customized  */
+  position: fixed; /* Ensures background covers the entire screen */
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgb(235, 190, 123); /* White background */
+  background-color: rgb(235, 190, 123); 
   z-index: 7000; /* Ensure it's on top of everything */
-  pointer-events: none; /* Allow clicks to pass through */
+  pointer-events: none; /* Prevents clicks from passing through */
 }
 
 #reset-game-button {
+  /* Restart button display design */
   background-color: #4CAF50;
   color: white;
   padding: 10px 20px;
@@ -185,10 +201,12 @@ main {
 }
 
 #reset-game-button:hover {
+  /* Changes the restart button's color on hover*/
   background-color: #45a049;
 }
 
 .reroll-container {
+  /* Reroll button display design*/
   display: flex;
   pointer-events: auto;
   justify-content: center; /* Center the reroll button horizontally */
@@ -196,6 +214,7 @@ main {
 }
 
 .reroll {
+  /* Details the reroll button */
   padding: 1rem;
   pointer-events: auto;
   background-color: #2C3E50;
@@ -207,6 +226,7 @@ main {
 }
 
 footer {
+  /* Footer display design*/
   text-align: center;
   padding: 1rem;
   background-color: #2C3E50;

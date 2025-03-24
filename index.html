@@ -16,6 +16,7 @@
         <div class="main-container">
           <div class="scores-container">
             <div class="score">
+              <!--Class holding all of the identification for the score chart-->
                 <section id="ones" class="inline-content">
                   <h2>Ones</h2>
                   <div class="ones_score_container">
@@ -115,27 +116,28 @@
               </div>
             </div>
             <div class="cards-container">
-              <div class="store-item">
+              <!--Class containing all of the Card base pngs-->
+              <div class="cards-png">
                 <button id="card1">
                   <img src="Cards\two_of_clubs.png" value="2" />
                 </button>
               </div>
-              <div class="store-item">
+              <div class="cards-png">
                 <button id="card2">
                   <img src="Cards\two_of_clubs.png" value="3" />
                 </button>
               </div>
-              <div class="store-item">
+              <div class="cards-png">
                 <button id="card3">
                   <img src="Cards\two_of_clubs.png" value="4" />
                 </button>
               </div>
-              <div class="store-item">
+              <div class="cards-png">
                 <button id="card4">
                   <img src="Cards\two_of_clubs.png" value="5" />
                 </button>
               </div>
-              <div class="store-item">
+              <div class="cards-png">
                 <button id="card5">
                   <img src="Cards\two_of_clubs.png" value="6" />
                 </button>
@@ -143,19 +145,22 @@
             </div>
         </div>
         <div class="reroll-container">
+          <!--Class containing the base reroll button-->
           <button type="button" id="reroll" class="reroll">Reroll unlocked</button>
           <button type="button" id="reroll_count" class="reroll">30</button>
       </div>
       <div id="game-over-screen" style="display: none;">
+        <!--Provides functionality for a game over screen
+        This will hide all other information and only display this data-->
         <h1>Game Over!</h1>
         <p>All scores have been locked.</p>
         <p id="total-score-display">You scored [total]</p> 
         <button id="reset-game-button">Play Again</button>
        </div>
       </main>
-      <footer><p>© 2024 My Yar. All rights reserved.</p></footer>
-      <div id="white-overlay" style="display: none;"></div>
+      <footer><p>© 2025 Justin Ott. All rights reserved.</p></footer>
+      <div id="background-overlay" style="display: none;"></div>
     </div>
-    <script src="yar.js"></script> <!-- JavaScript file at the end of the body -->
+    <script src="yar.js"></script> 
   </body>
 </html>
