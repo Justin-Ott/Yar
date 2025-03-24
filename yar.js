@@ -210,35 +210,28 @@ function updateScores() {
     // Sort card values in ascending order
     cardValues.sort((a, b) => a - b);
 
-    // Check for Straight (4 or 5 cards in a row)
+    // Create a set of unique values for straight checking
+    const uniqueValues = [...new Set(cardValues)];
+
+    // Check for Straight (4 or 5 unique cards in a row)
     let isStraight4 = false;
     let isStraight5 = false;
 
-    // Check for 5-card Straight
-    if (cardValues.length === 5) {
-        let isConsecutive = true;
-        for (let i = 1; i < cardValues.length; i++) {
-            if (cardValues[i] !== cardValues[i - 1] + 1) {
-                isConsecutive = false;
-                break;
-            }
-        }
-        if (isConsecutive) {
-            isStraight5 = true;
-        }
+    // Check for 5-card Straight (needs 5 unique consecutive values)
+    if (uniqueValues.length === 5) {
+        isStraight5 = uniqueValues.every((val, i, arr) => 
+            i === 0 || val === arr[i - 1] + 1
+        );
     }
 
-    // Check for 4-card Straight
-    if (!isStraight5 && cardValues.length >= 4) {
-        for (let i = 0; i <= cardValues.length - 4; i++) {
-            let isConsecutive = true;
-            for (let j = 1; j < 4; j++) {
-                if (cardValues[i + j] !== cardValues[i + j - 1] + 1) {
-                    isConsecutive = false;
-                    break;
-                }
-            }
-            if (isConsecutive) {
+    // Check for 4-card Straight (needs 4 unique consecutive values)
+    if (!isStraight5 && uniqueValues.length >= 4) {
+        // Check all possible 4-card sequences in the unique values
+        for (let i = 0; i <= uniqueValues.length - 4; i++) {
+            const sequence = uniqueValues.slice(i, i + 4);
+            if (sequence.every((val, idx) => 
+                idx === 0 || val === sequence[idx - 1] + 1
+            )) {
                 isStraight4 = true;
                 break;
             }
