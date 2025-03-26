@@ -6,17 +6,18 @@ const cardImages = [
     // Add more card image paths as needed
 ];
 
-// Function to get a random image from the array
 function getRandomImage() {
+    // Gets a random image from the array
     const randomIndex = Math.floor(Math.random() * cardImages.length);
     return cardImages[randomIndex];
 }
 
-// Function to update all card images
 function updateCardImages() {
+    // Updates all card images 
     const cardIds = ["card1", "card2", "card3", "card4", "card5"];
     cardIds.forEach((id) => {
-        const buttonElement = document.getElementById(id); // Get the button
+        // Since the cards are buttons we need to get the id
+        const buttonElement = document.getElementById(id); 
         if (buttonElement) {
             const imgElement = buttonElement.querySelector("img"); // Get the <img> inside the button
             if (imgElement && !lockedCards[id]) { // Skip if the card is locked
@@ -29,6 +30,7 @@ function updateCardImages() {
 }
 
 function areAllScoresLocked() {
+    // Detects when the game should be over due to all scores being locked
     for (const key in scoresLocked) {
         if (key !== "total" && scoresLocked[key] === false) {
             return false; // At least one score is not locked
@@ -38,6 +40,8 @@ function areAllScoresLocked() {
 }
 
 function cardTotals() {
+    // Goes through each updated card button and assigns the correct value
+    // to the id based on the png
     const cardIds = ["card1", "card2", "card3", "card4", "card5"];
     cardIds.forEach((id) => {
         const buttonElement = document.getElementById(id); // Get the button
@@ -59,15 +63,17 @@ function cardTotals() {
                 } else if (src.includes("six")) {
                     imgElement.setAttribute("value", 6);
                 }
-
+                // Allows for debugging based on incorrect asigned values
                 console.log(`Card ${id} value: ${imgElement.getAttribute("value")}`);
             }
         } else {
+            // Missing card id error alerts
             console.error(`Element with id "${id}" not found.`);
         }
     });
 }
 const scoresLocked = {
+    // Array holding base score values
     ones: false,
     twos: false,
     threes: false,
@@ -86,16 +92,21 @@ const scoresLocked = {
     total: 0
 };
 
-    const lockedCards = {
-        card1: false,
-        card2: false,
-        card3: false,
-        card4: false,
-        card5: false
-    };
+const lockedCards = {
+    // Array holding if the card buttons are locked
+    card1: false,
+    card2: false,
+    card3: false,
+    card4: false,
+    card5: false
+};
 
 function updateScores() {
+    // Where all the score values are updated based on their correct 
+    // score specifications
     const scoreIds = [
+        // Array holding all of the button ids since this is where the score
+        // text/value is displayed
         "ones_button", "twos_button", "threes_button", "fours_button", "fives_button", "sixes_button",
         "duo_button", "triple_button", "quad_button", "den_o_wolf_button", "dragon_claw_button",
         "yar_button", "straight_button", "full_house_button", "chance_button", "total_button",
@@ -104,6 +115,7 @@ function updateScores() {
     // Get all card elements
     const cardIds = ["card1", "card2", "card3", "card4", "card5"];
     const cardElements = cardIds.map(id => {
+        // Asigns the img inside the button
         const buttonElement = document.getElementById(id); // Get the button
         if (buttonElement) {
             return buttonElement.querySelector("img"); // Return the <img> inside the button
@@ -111,8 +123,8 @@ function updateScores() {
         return null;
     });
 
-    // Initialize scores for each category
     const scores = {
+        // Array holding the initial scores 
         ones: 0,
         twos: 0,
         threes: 0,
@@ -131,72 +143,77 @@ function updateScores() {
         total: 0
     };
 
-    // Create a frequency map to count occurrences of each value
+    
     const frequencyMap = {};
     const cardValues = [];
     cardElements.forEach(imgElement => {
+        // Create a frequency map to count occurrences of each value
+        // This will be used to check for different score updates
         if (imgElement) {
+            // Iterates through all the cards to get their value
             const value = parseInt(imgElement.getAttribute("value"), 10);
             if (!isNaN(value)) {
+                // Records every cards frequency in an array
                 frequencyMap[value] = (frequencyMap[value] || 0) + 1;
                 cardValues.push(value);
             }
         }
     });
 
-    // Step 2: Calculate combo scores
     let highestDuoScore = 0;
     let highestTripleScore = 0;
     let highestQuadScore = 0;
-    let highestYarScore = 0;
+    let YarScore = 0;
     for (const value in frequencyMap) {
-        if (frequencyMap[value] >= 2) { // Check if there are at least 2 cards with this value
+        // This is where any multiple scores are checked 
+        // Including duo, triple, quad, and yar
+        if (frequencyMap[value] >= 2) { // At least 2 cards with this value
             const duoScore = value * 2; // Sum of the pair
             if (duoScore > highestDuoScore) {
-                highestDuoScore = duoScore; // Track the highest duo score
+                highestDuoScore = duoScore; // Tracks the highest duo score
             }
         }
-        if (frequencyMap[value] >= 3) { // Check if there are at least 3 cards with this value
+        if (frequencyMap[value] >= 3) { // At least 3 cards with this value
             const TripleScore = value * 3; // Sum of the triple
             if (TripleScore > highestTripleScore) {
                 highestTripleScore = TripleScore; // Track the highest triple score
             }
         }
-        if (frequencyMap[value] >= 4) { // Check if there are at least 4 cards with this value
+        if (frequencyMap[value] >= 4) { // At least 4 cards with this value
             const QuadScore = value * 4; // Sum of the quad
             if (QuadScore > highestQuadScore) {
                 highestQuadScore = QuadScore; // Track the highest quad score
             }
         }
-        if (frequencyMap[value] >= 5) { // Check if there are at least 4 cards with this value
-            highestYarScore = 50; // Track the highest quad score
+        if (frequencyMap[value] >= 5) { // At least 4 cards with this value
+            YarScore = 50; // Updates Yar score
         }
     }
-    scores.duo = highestDuoScore; // Update the duo score
-    scores.triple = highestTripleScore; // Update the duo score
-    scores.quad = highestQuadScore; // Update the duo score
-    scores.yar = highestYarScore; // Update the yar score
+    scores.duo = highestDuoScore; // Updates the duo score
+    scores.triple = highestTripleScore; // Updates the triple score
+    scores.quad = highestQuadScore; // Updates the quad score
+    scores.yar = YarScore; // Updates the yar score 
 
     const duos = [];
     for (const value in frequencyMap) {
-        if (frequencyMap[value] >= 2) { // Check if it's a duo
+        if (frequencyMap[value] >= 2) { // Check if theres any duplicate cards
             duos.push(value); // Add the value to the duos array
         }
     }
     if (duos.length >= 2) { // At least two distinct duos
-        scores.den_o_wolf = 25; // Update dragon claw score
+        scores.den_o_wolf = 25; // Update dragon claw score 2 duos
     } else {
-        scores.den_o_wolf = 0; // Reset dragon claw score
+        scores.den_o_wolf = 0; // Reset dragon claw score if 1 or less duos
     }
     let tripletValue = null;
     let pairValue = null;
 
     for (const value in frequencyMap) {
         if (frequencyMap[value] >= 3) {
-            tripletValue = value; // Found a triplet
+            tripletValue = value; // Records the triplet's value
         }
         if (frequencyMap[value] >= 2 && value !== tripletValue) {
-            pairValue = value; // Found a pair that is not part of the triplet
+            pairValue = value; // Only if a pair that is not part of the triplet exists
         }
     }
 
@@ -210,14 +227,14 @@ function updateScores() {
     // Sort card values in ascending order
     cardValues.sort((a, b) => a - b);
 
-    // Create a set of unique values for straight checking
+    // Creates a set of unique values for straight checking
     const uniqueValues = [...new Set(cardValues)];
 
-    // Check for Straight (4 or 5 unique cards in a row)
+    // Initial var for 4 or 5 unique cards in a row
     let isStraight4 = false;
     let isStraight5 = false;
 
-    // Check for 5-card Straight (needs 5 unique consecutive values)
+    // Check foe 5 unique consecutive values
     if (uniqueValues.length === 5) {
         isStraight5 = uniqueValues.every((val, i, arr) => 
             i === 0 || val === arr[i - 1] + 1
@@ -238,12 +255,12 @@ function updateScores() {
         }
     }
 
-    // Update Straight score
+    // Update Straight and full_house scores
     if (isStraight5) {
-        scores.straight = 30; // Example score for 5-card Straight
+        scores.straight = 30; 
         scores.full_house = 40;
     } else if (isStraight4) {
-        scores.straight = 30; // Example score for 4-card Straight
+        scores.straight = 30;
         scores.full_house = 0;
     } else {
         scores.straight = 0;
@@ -253,7 +270,7 @@ function updateScores() {
     // Calculate scores based on card values
     cardElements.forEach(cardElement => {
         if (cardElement) {
-            const value = parseInt(cardElement.getAttribute("value"), 10); // Get the card value
+            const value = parseInt(cardElement.getAttribute("value"), 10); // Gets the card value
             if (!isNaN(value)) {
                 if (value === 1) {
                     scores.ones += 1;
@@ -281,7 +298,8 @@ function updateScores() {
         }
     }
 
-    // Step 4: Update the DOM with the calculated scores
+    // Update the button/scoreboard with the calculated scores
+    // if and only if it is their first time being assigned
     scoreIds.forEach(id => {
         const scoreElement = document.getElementById(id);
         if (scoreElement) {
@@ -290,20 +308,23 @@ function updateScores() {
                 // Remove "_button" from the ID to match the keys in the scores object
                 const scoreKey = id.replace("_button", "");
                 scoreElement.textContent = scores[scoreKey]; // Update the button text
-                console.log(`Updated ${id} with value: ${scores[scoreKey]}`); // Debugging
+                console.log(`Updated ${id} with value: ${scores[scoreKey]}`); // Debugging assistance
             }
         } else {
-            console.error(`Element with id "${id}" not found.`); // Debugging
+            console.error(`Element with id "${id}" not found.`); // Error assistance
         }
     });
 }
 
-// Function to lock a button when clicked
-// Function to lock a button when clicked
+
 function lockButton(event) {
+    // Locks the cards and their pngs when the card(button) is clicked
+    // This allows for the reroll button to only roll the unlocked cards
     const button = event.target;
     button.setAttribute("data-locked", "true");
-    button.removeEventListener("click", lockButton); // Remove the event listener after locking
+    // Remove the event listener after locking
+    // This is how the lock functionality is implemented
+    button.removeEventListener("click", lockButton); 
     button.style.backgroundColor = "yellow";
 
     // Update the locked score in scoresLocked
@@ -316,27 +337,31 @@ function lockButton(event) {
         scoresLocked.total = 0; // Reset the total
         for (const key in scoresLocked) {
             if (key !== "total" && scoresLocked[key] !== false) {
-                scoresLocked.total += scoresLocked[key]; // Add the locked score to the total
+                // Add the locked score to the total ensures
+                //  that each score is only counted once
+                scoresLocked.total += scoresLocked[key]; 
             }
         }
     }
 
-    // Check if all scores are locked
+    // Check if all scores are locked if so end game
     if (areAllScoresLocked()) {
         // Display the game over screen
         const gameOverScreen = document.getElementById("game-over-screen");
         gameOverScreen.style.display = "block";
 
-        // Update the total score display
+        // Update the total score display on game over screen
         const totalScoreDisplay = document.getElementById("total-score-display");
-        totalScoreDisplay.textContent = `You scored ${scoresLocked.total}`; // Insert the total score
+        totalScoreDisplay.textContent = `You scored ${scoresLocked.total}`;
 
-        // Show the white overlay
+        // Show the background overlay to hid the game
         const whiteOverlay = document.getElementById("background-overlay");
         whiteOverlay.style.display = "block";
     }
 
     // Unlock and update cards when the score button is locked
+    // ensures that the cards and scores are rerolled correctly 
+    // after a score is locked
     const cardIds = ["card1", "card2", "card3", "card4", "card5"];
     cardIds.forEach((id) => {
         const buttonElement = document.getElementById(id);
@@ -365,7 +390,7 @@ function lockButton(event) {
     cardTotals();
     updateScores();
 
-    // Reset the reroll counter
+    // Reset the reroll counter to 3
     rerollCount = 0;
     const element = document.getElementById("reroll_count");
     element.textContent = 3 - rerollCount;
@@ -374,7 +399,6 @@ function lockButton(event) {
 
 var rerollCount = 0;
 
-// Update card images on page load
 // Function to lock a card
 function lockCard(event) {
     const buttonElement = event.currentTarget;
@@ -383,7 +407,8 @@ function lockCard(event) {
 
     console.log("Card ID:", cardId);
     console.log("Locked state:", lockedCards[cardId]);
-
+    
+    // Either unlocks or locks the clicked card
     if (!lockedCards[cardId]) {
         console.log("Locking card:", cardId);
         const src = imgElement.src;
@@ -416,6 +441,7 @@ function lockCard(event) {
 }
 
 // Add event listeners to the cards on page load
+// This allows for the game to be actually played
 window.onload = () => {
     updateCardImages();
     cardTotals();
@@ -424,6 +450,7 @@ window.onload = () => {
     element.textContent = 3 - rerollCount;
 
     // Add event listeners to the score buttons to lock them when clicked
+    // ensures that scores stay the same after rerolling the cards
     const scoreIds = [
         "ones_button", "twos_button", "threes_button", "fours_button", "fives_button", "sixes_button",
         "duo_button", "triple_button", "quad_button", "den_o_wolf_button", "dragon_claw_button",
@@ -437,6 +464,7 @@ window.onload = () => {
     });
 
     // Add event listeners to the cards to lock them when clicked
+    // ensures that when the cards are rerolled they stay if locked
     const cardIds = ["card1", "card2", "card3", "card4", "card5"];
     cardIds.forEach(id => {
         const button = document.getElementById(id);
@@ -467,7 +495,7 @@ document.getElementById("reset-game-button").addEventListener("click", () => {
     const gameOverScreen = document.getElementById("game-over-screen");
     gameOverScreen.style.display = "none";
 
-    // Hide the white overlay
+    // Hide the background overlay
     const whiteOverlay = document.getElementById("background-overlay");
     whiteOverlay.style.display = "none";
 
