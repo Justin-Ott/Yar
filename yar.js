@@ -1,34 +1,95 @@
 // Array of card image paths
-const cardImages = [
-    "Cards/two_of_clubs.png",  "Cards/three_of_clubs.png",
-    "Cards/four_of_clubs.png", "Cards/five_of_clubs.png",
-    "Cards/six_of_clubs.png",  "Cards/ace_of_clubs.png",
-    // Add more card image paths as needed
-];
+// const cardImages = [
+//     "Cards/two_of_clubs.png",  "Cards/three_of_clubs.png",
+//     "Cards/four_of_clubs.png", "Cards/five_of_clubs.png",
+//     "Cards/six_of_clubs.png",  "Cards/ace_of_clubs.png",
+//     "Cards/ace_of_clubs 1.png"
+//     // Add more card image paths as needed
+// ];
 
-function getRandomImage() {
-    // Gets a random image from the array
-    const randomIndex = Math.floor(Math.random() * cardImages.length);
-    return cardImages[randomIndex];
+// function getRandomImage() {
+//     // Gets a random image from the array
+//     const randomIndex = Math.floor(Math.random() * cardImages.length);
+//     return cardImages[randomIndex];
+// }
+
+// function updateCardImages() {
+//     // Updates all card images 
+//     const cardIds = ["card1", "card2", "card3", "card4", "card5"];
+//     cardIds.forEach((id) => {
+//         // Since the cards are buttons we need to get the id
+//         const buttonElement = document.getElementById(id); 
+//         if (buttonElement) {
+//             const imgElement = buttonElement.querySelector("img"); // Get the <img> inside the button
+//             if (imgElement && !lockedCards[id]) { // Skip if the card is locked
+//                 imgElement.src = getRandomImage(); // Update the <img> src
+//             }
+//         } else {
+//             console.error(`Element with id "${id}" not found.`);
+//         }
+//     });
+// }
+
+// 1. Define six arrays, one for each card value
+
+const aceCards = ["Cards/ace_v_1.png","Cards/ace_v_2.png",
+    "Cards/ace_v_3.png","Cards/ace_v_4.png","Cards/ace_v_5.png"];
+const twoCards = ["Cards/two_v_1.png","Cards/two_v_2.png",
+    "Cards/two_v_3.png","Cards/two_v_4.png","Cards/two_v_5.png"]
+const threeCards = ["Cards/three_v_1.png","Cards/three_v_2.png",
+    "Cards/three_v_3.png","Cards/three_v_4.png","Cards/three_v_5.png"]
+const fourCards = ["Cards/four_v_1.png","Cards/four_v_2.png",
+    "Cards/four_v_3.png","Cards/four_v_4.png","Cards/four_v_5.png"]
+const fiveCards = ["Cards/five_v_1.png","Cards/five_v_2.png",
+    "Cards/five_v_3.png","Cards/five_v_4.png","Cards/five_v_5.png"]
+const sixCards = ["Cards/six_v_1.png","Cards/six_v_2.png",
+    "Cards/six_v_3.png","Cards/six_v_4.png","Cards/six_v_5.png"]
+
+
+// 2. Helper to pick a random element from an array
+function pickRandom(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
 }
 
+// 3. Get a pool of 6 unique cards (one from each value)
+function getCardPool() {
+    return [
+        pickRandom(aceCards),
+        pickRandom(twoCards),
+        pickRandom(threeCards),
+        pickRandom(fourCards),
+        pickRandom(fiveCards),
+        pickRandom(sixCards)
+    ];
+}
+
+// 4. Shuffle an array (Fisher-Yates)
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+// 5. Update card images with 5 unique cards (no duplicates)
 function updateCardImages() {
-    // Updates all card images 
     const cardIds = ["card1", "card2", "card3", "card4", "card5"];
-    cardIds.forEach((id) => {
-        // Since the cards are buttons we need to get the id
+    // Get a pool of 6 unique cards, shuffle, and pick first 5
+    const cardPool = shuffle(getCardPool()).slice(0, 5);
+
+    cardIds.forEach((id, idx) => {
         const buttonElement = document.getElementById(id); 
         if (buttonElement) {
-            const imgElement = buttonElement.querySelector("img"); // Get the <img> inside the button
-            if (imgElement && !lockedCards[id]) { // Skip if the card is locked
-                imgElement.src = getRandomImage(); // Update the <img> src
+            const imgElement = buttonElement.querySelector("img");
+            if (imgElement && !lockedCards[id]) {
+                imgElement.src = cardPool[idx];
             }
         } else {
             console.error(`Element with id "${id}" not found.`);
         }
     });
 }
-
 function areAllScoresLocked() {
     // Detects when the game should be over due to all scores being locked
     for (const key in scoresLocked) {
@@ -363,27 +424,20 @@ function lockButton(event) {
     // ensures that the cards and scores are rerolled correctly 
     // after a score is locked
     const cardIds = ["card1", "card2", "card3", "card4", "card5"];
-    cardIds.forEach((id) => {
-        const buttonElement = document.getElementById(id);
-        if (buttonElement) {
-            const imgElement = buttonElement.querySelector("img");
-            if (imgElement && lockedCards[id]) {
-                const src = imgElement.src;
-                const cardValue = src.includes("ace_locked") ? 1 :
-                                 src.includes("two_locked") ? 2 :
-                                 src.includes("three_locked") ? 3 :
-                                 src.includes("four_locked") ? 4 :
-                                 src.includes("five_locked") ? 5 :
-                                 src.includes("six_locked") ? 6 : null;
-
-                // Check if the card value matches the score button
-                if (cardValue !== null ) {
-                    lockedCards[id] = false; // Unlock the card
-                    imgElement.src = `Cards/${cardValue}_of_clubs.png`; // Replace with the unlocked image
-                }
+cardIds.forEach((id) => {
+    const buttonElement = document.getElementById(id);
+    if (buttonElement) {
+        const imgElement = buttonElement.querySelector("img");
+        if (imgElement && lockedCards[id]) {
+            // Restore the original image if it was locked
+            const originalSrc = imgElement.getAttribute("data-original-src");
+            if (originalSrc) {
+                imgElement.src = originalSrc;
             }
+            lockedCards[id] = false;
         }
-    });
+    }
+});
 
     // Update card images and totals after unlocking cards
     updateCardImages();
@@ -400,43 +454,67 @@ function lockButton(event) {
 var rerollCount = 0;
 
 // Function to lock a card
+// function lockCard(event) {
+//     const buttonElement = event.currentTarget;
+//     const imgElement = buttonElement.querySelector("img");
+//     const cardId = buttonElement.id;
+
+//     console.log("Card ID:", cardId);
+//     console.log("Locked state:", lockedCards[cardId]);
+    
+//     // Either unlocks or locks the clicked card
+//     if (!lockedCards[cardId]) {
+//         console.log("Locking card:", cardId);
+//         const src = imgElement.src;
+//         const cardValue = src.includes("ace") ? "ace" :
+//                          src.includes("two") ? "two" :
+//                          src.includes("three") ? "three" :
+//                          src.includes("four") ? "four" :
+//                          src.includes("five") ? "five" :
+//                          src.includes("six") ? "six" : null;
+
+//         if (cardValue !== null) {
+//             imgElement.src = `Cards/${cardValue}_locked.png`;
+//             lockedCards[cardId] = true; // Lock the card
+//         }
+//     } else {
+//         console.log("Unlocking card:", cardId);
+//         const src = imgElement.src;
+//         const cardValue = src.includes("ace_locked") ? "ace" :
+//                          src.includes("two_locked") ? "two" :
+//                          src.includes("three_locked") ? "three" :
+//                          src.includes("four_locked") ? "four" :
+//                          src.includes("five_locked") ? "five" :
+//                          src.includes("six_locked") ? "six" : null;
+
+//         if (cardValue !== null) {
+//             imgElement.src = `Cards/${cardValue}_of_clubs.png`;
+//             lockedCards[cardId] = false; // Unlock the card
+//         }
+//     }
+//}
+
 function lockCard(event) {
     const buttonElement = event.currentTarget;
     const imgElement = buttonElement.querySelector("img");
     const cardId = buttonElement.id;
 
-    console.log("Card ID:", cardId);
-    console.log("Locked state:", lockedCards[cardId]);
-    
-    // Either unlocks or locks the clicked card
     if (!lockedCards[cardId]) {
-        console.log("Locking card:", cardId);
-        const src = imgElement.src;
-        const cardValue = src.includes("ace") ? "ace" :
-                         src.includes("two") ? "two" :
-                         src.includes("three") ? "three" :
-                         src.includes("four") ? "four" :
-                         src.includes("five") ? "five" :
-                         src.includes("six") ? "six" : null;
+        // Locking: Save original src and set locked image
+        const originalSrc = imgElement.src;
+        imgElement.setAttribute("data-original-src", originalSrc);
 
-        if (cardValue !== null) {
-            imgElement.src = `Cards/${cardValue}_locked.png`;
-            lockedCards[cardId] = true; // Lock the card
-        }
+        // Insert '_locked' before '.png'
+        const lockedSrc = originalSrc.replace(/\.png$/, '_locked.png');
+        imgElement.src = lockedSrc;
+        lockedCards[cardId] = true;
     } else {
-        console.log("Unlocking card:", cardId);
-        const src = imgElement.src;
-        const cardValue = src.includes("ace_locked") ? "ace" :
-                         src.includes("two_locked") ? "two" :
-                         src.includes("three_locked") ? "three" :
-                         src.includes("four_locked") ? "four" :
-                         src.includes("five_locked") ? "five" :
-                         src.includes("six_locked") ? "six" : null;
-
-        if (cardValue !== null) {
-            imgElement.src = `Cards/${cardValue}_of_clubs.png`;
-            lockedCards[cardId] = false; // Unlock the card
+        // Unlocking: Restore original src
+        const originalSrc = imgElement.getAttribute("data-original-src");
+        if (originalSrc) {
+            imgElement.src = originalSrc;
         }
+        lockedCards[cardId] = false;
     }
 }
 
