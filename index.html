@@ -7,13 +7,38 @@
     <title>Yar</title>
   </head>
 
-  <body>
-    <div id="app">
-      <header>
-        <h1>Yar</h1>
-      </header>
-      <main>
-        <div class="main-container">
+
+<body>
+  <div class="layout">
+    <!-- 1. Header Row -->
+    <header>
+      <h1>Yar</h1>
+    </header>
+
+    <!-- 2. Players Row -->
+    <section class="players-row">
+      <h2>Players</h2>
+      <section class="players-row">
+  <div class="player-box left-player">
+    <img class="player-icon" src="Cards/ace_v_1.png" alt="Player 1 Icon" />
+    <div class="player-info">
+      <span class="player-name">Player 1</span>
+      <span class="player-winrate">Win Rate: 75%</span>
+    </div>
+  </div>
+  <div class="player-box right-player">
+    <img class="player-icon" src="Cards/ace_v_2.png" alt="Player 2 Icon" />
+    <div class="player-info">
+      <span class="player-name">Player 2</span>
+      <span class="player-winrate">Win Rate: 60%</span>
+    </div>
+  </div>
+</section>
+    </section>
+
+    <!-- 3. Game Row (cards and score) -->
+    <main>
+      <div class="main-container">
           <div class="scores-container">
             <div class="score">
               <!--Class holding all of the identification for the score chart-->
@@ -119,48 +144,51 @@
               <!--Class containing all of the Card base pngs-->
               <div class="cards-png">
                 <button id="card1">
-                  <img src="Cards\two_of_clubs.png" value="2" />
+                  <img src="Cards\two_of_clubs.png" value="2" draggable="false"/>
                 </button>
               </div>
               <div class="cards-png">
                 <button id="card2">
-                  <img src="Cards\two_of_clubs.png" value="3" />
+                  <img src="Cards\two_of_clubs.png" value="3" draggable="false"/>
                 </button>
               </div>
               <div class="cards-png">
                 <button id="card3">
-                  <img src="Cards\two_of_clubs.png" value="4" />
+                  <img src="Cards\two_of_clubs.png" value="4" draggable="false"/>
                 </button>
               </div>
               <div class="cards-png">
                 <button id="card4">
-                  <img src="Cards\two_of_clubs.png" value="5" />
+                  <img src="Cards\two_of_clubs.png" value="5" draggable="false"/>
                 </button>
               </div>
               <div class="cards-png">
                 <button id="card5">
-                  <img src="Cards\two_of_clubs.png" value="6" />
+                  <img src="Cards\two_of_clubs.png" value="6" draggable="false"/>
                 </button>
               </div>
             </div>
         </div>
-        <div class="reroll-container">
-          <!--Class containing the base reroll button-->
-          <button type="button" id="reroll" class="reroll">Reroll unlocked</button>
-          <button type="button" id="reroll_count" class="reroll">30</button>
-      </div>
-      <div id="game-over-screen" style="display: none;">
-        <!--Provides functionality for a game over screen
-        This will hide all other information and only display this data-->
-        <h1>Game Over!</h1>
-        <p>All scores have been locked.</p>
-        <p id="total-score-display">You scored [total]</p> 
-        <button id="reset-game-button">Play Again</button>
-       </div>
-      </main>
-      <footer><p>© 2025 Justin Ott. All rights reserved.</p></footer>
-      <div id="background-overlay" style="display: none;"></div>
+    </main>
+
+    <!-- 4. Reroll Row -->
+    <div class="reroll-container">
+      <button type="button" id="reroll" class="reroll">Reroll unlocked</button>
+      <button type="button" id="reroll_count" class="reroll">30</button>
     </div>
-    <script src="yar.js"></script> 
-  </body>
-</html>
+
+    <!-- 5. Footer Row -->
+    <footer>
+      <p>© 2025 Justin Ott. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <div id="game-over-screen" style="display: none;">
+    <h1>Game Over!</h1>
+    <p>All scores have been locked.</p>
+    <p id="total-score-display">You scored [total]</p>
+    <button id="reset-game-button">Play Again</button>
+  </div>
+  <div id="background-overlay" style="display: none;"></div>
+  <script src="yar.js"></script>
+</body>

@@ -5,6 +5,19 @@
   box-sizing: border-box;
 }
 
+.layout {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto auto;
+  min-height: 100vh;
+  height: 100vh;
+  user-select: none;
+  -webkit-user-select: none; /* For Safari */
+}
+
+header, .players-row, main, .reroll-container, footer {
+  width: 100%;
+}
+
 body {
   /* Entire website design*/
   background-color: #4e91f5; 
@@ -67,6 +80,47 @@ main {
   width: 100%;
   height: fit-content;
   overflow: hidden; /* Prevent horizontal and vertical scrolling */
+}
+.players-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: #e0e0e0;
+}
+
+.player-box {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 1rem 2rem;
+  min-width: 220px;
+  gap: 1rem;
+}
+
+.player-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #3498DB;
+}
+
+.player-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.player-name {
+  font-weight: bold;
+  color: #2C3E50;
+}
+
+.player-winrate {
+  color: #3498DB;
+  font-size: 1rem;
 }
 
 .scores-container {
@@ -219,7 +273,7 @@ main {
   pointer-events: auto;
   background-color: #2C3E50;
   border: 3px solid #ffffff;
-  font-size: 0.9rem;
+  font-size: 2rem;
   color: #3498DB;
   text-align: center;
   cursor: pointer;
