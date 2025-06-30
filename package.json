@@ -1,0 +1,23 @@
+{
+  "name": "yar",
+  "version": "1.0.0",
+  "description": "As an avid Black Desert Online player one of my favorite aspects of the game is Yar which my friends and I use to entertain ourselves when we are waiting for different ingame activities.",
+  "main": "yar.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Justin-Ott/Yar.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Justin-Ott/Yar/issues"
+  },
+  "homepage": "https://github.com/Justin-Ott/Yar#readme",
+  "dependencies": {
+    "firebase": "^11.10.0"
+  }
+}

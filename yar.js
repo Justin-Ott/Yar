@@ -1,3 +1,26 @@
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyDsnGxYFk6b0sWpXnCYsg0RcZXVuE-VFzw",
+  authDomain: "yarr-6707d.firebaseapp.com",
+  projectId: "yarr-6707d",
+  storageBucket: "yarr-6707d.firebasestorage.app",
+  messagingSenderId: "657347999774",
+  appId: "1:657347999774:web:2d8bb0f17d7adfa01d960f",
+  measurementId: "G-9M6XX2XYL0"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
+
 // Array of card image paths
 // const cardImages = [
 //     "Cards/two_of_clubs.png",  "Cards/three_of_clubs.png",
