@@ -80,15 +80,7 @@ function updateCardImages() {
     });
 }
 
-// Check if all scores are locked
-function areAllScoresLocked() {
-    for (const key in scoresLocked) {
-        if (key !== "total" && scoresLocked[key] === false) {
-            return false;
-        }
-    }
-    return true;
-}
+
 
 // Assign card values based on image src
 function cardTotals() {
@@ -113,8 +105,15 @@ function cardTotals() {
     });
 }
 
-// Score state
-const scoresLocked = {
+let currentPlayer = 1; // 1 for Player 1, 2 for Player 2
+
+// Score state for each player
+const scoresLockedP1 = {
+    ones: false, twos: false, threes: false, fours: false, fives: false, sixes: false,
+    duo: false, triple: false, quad: false, den_o_wolf: false, dragon_claw: false,
+    yar: false, straight: false, full_house: false, chance: false, total: 0
+};
+const scoresLockedP2 = {
     ones: false, twos: false, threes: false, fours: false, fives: false, sixes: false,
     duo: false, triple: false, quad: false, den_o_wolf: false, dragon_claw: false,
     yar: false, straight: false, full_house: false, chance: false, total: 0
@@ -125,13 +124,33 @@ const lockedCards = {
     card1: false, card2: false, card3: false, card4: false, card5: false
 };
 
+// Helper to get the correct scoresLocked object
+function getScoresLocked() {
+    return currentPlayer === 1 ? scoresLockedP1 : scoresLockedP2;
+}
+
+// Check if all scores are locked for both players
+function areAllScoresLocked() {
+    const allLocked = (scoresObj) => Object.keys(scoresObj).every(
+        key => key === "total" || scoresObj[key] !== false
+    );
+    return allLocked(scoresLockedP1) && allLocked(scoresLockedP2);
+}
+
 // Update all scores
 function updateScores() {
-    const scoreIds = [
-        "ones_button", "twos_button", "threes_button", "fours_button", "fives_button", "sixes_button",
-        "duo_button", "triple_button", "quad_button", "den_o_wolf_button", "dragon_claw_button",
-        "yar_button", "straight_button", "full_house_button", "chance_button", "total_button"
+    const scoreKeys = [
+    "ones", "twos", "threes", "fours", "fives", "sixes",
+    "duo", "triple", "quad", "den_o_wolf", "dragon_claw",
+    "yar", "straight", "full_house", "chance", "total"
     ];
+
+    scoreKeys.forEach(key => {
+    [1, 2].forEach(playerNum => {
+        const btn = document.getElementById(`p${playerNum}_${key}_button`);
+        if (btn) btn.addEventListener("click", lockButton);
+    });
+    });
 
     const cardIds = ["card1", "card2", "card3", "card4", "card5"];
     const cardElements = cardIds.map(id => {
@@ -288,28 +307,62 @@ function updateScores() {
             }
         }
     });
-
+    
+    const scoresLocked = getScoresLocked();
     for (const key in scoresLocked) {
         if (scoresLocked.hasOwnProperty(key) && key !== "total") {
             scores.total += scoresLocked[key];
         }
     }
+    
+    
 
     // Update the button/scoreboard with the calculated scores
     // if and only if it is their first time being assigned
-    scoreIds.forEach(id => {
-        const scoreElement = document.getElementById(id);
-        if (scoreElement) {
-            // Check if the button is locked
-            if (scoreElement.getAttribute("data-locked") !== "true") {
-                // Remove "_button" from the ID to match the keys in the scores object
-                const scoreKey = id.replace("_button", "");
-                scoreElement.textContent = scores[scoreKey]; // Update the button text
-                console.log(`Updated ${id} with value: ${scores[scoreKey]}`); // Debugging assistance
-            }
-        } else {
-            console.error(`Element with id "${id}" not found.`); // Error assistance
+    scoreKeys.forEach(key => {
+    const scoreElement = document.getElementById(`p${currentPlayer}_${key}_button`);
+    if (scoreElement) {
+        if (scoreElement.getAttribute("data-locked") !== "true") {
+            scoreElement.textContent = scores[key];
+            console.log(`Updated p${currentPlayer}_${key}_button with value: ${scores[key]}`);
         }
+    } else {
+        console.error(`Element with id "p${currentPlayer}_${key}_button" not found.`);
+    }
+});
+}
+
+function updateScoreButtonStates() {
+    const scoreKeys = [
+        "ones", "twos", "threes", "fours", "fives", "sixes",
+        "duo", "triple", "quad", "den_o_wolf", "dragon_claw",
+        "yar", "straight", "full_house", "chance", "total"
+    ];
+
+    // Disable other player's buttons, enable current player's unlocked buttons
+    [1, 2].forEach(playerNum => {
+        scoreKeys.forEach(key => {
+            const btn = document.getElementById(`p${playerNum}_${key}_button`);
+            if (btn) {
+                if (playerNum === currentPlayer) {
+                    // Enable if not locked
+                    if (btn.getAttribute("data-locked") !== "true") {
+                        btn.disabled = false;
+                        btn.style.opacity = "1";
+                        btn.style.pointerEvents = "auto";
+                    } else {
+                        btn.disabled = true;
+                        btn.style.opacity = "0.6";
+                        btn.style.pointerEvents = "none";
+                    }
+                } else {
+                    // Always disable other player's buttons
+                    btn.disabled = true;
+                    btn.style.opacity = "0.6";
+                    btn.style.pointerEvents = "none";
+                }
+            }
+        });
     });
 }
 
@@ -320,25 +373,34 @@ function lockButton(event) {
     button.removeEventListener("click", lockButton);
     button.style.backgroundColor = "yellow";
 
-    const scoreKey = button.id.replace("_button", "");
+    const scoreKey = button.id.replace(/^p[12]_/, "").replace("_button", "");
     const scoreValue = parseInt(button.textContent, 10);
+    const scoresLocked = getScoresLocked();
+
     if (!isNaN(scoreValue)) {
-        scoresLocked[scoreKey] = scoreValue;
-        scoresLocked.total = 0;
-        for (const key in scoresLocked) {
-            if (key !== "total" && scoresLocked[key] !== false) {
-                scoresLocked.total += scoresLocked[key];
-            }
+    scoresLocked[scoreKey] = scoreValue;
+    scoresLocked.total = 0;
+    for (const key in scoresLocked) {
+        if (key !== "total" && scoresLocked[key] !== false) {
+            scoresLocked.total += scoresLocked[key];
         }
     }
+    // Instantly update the total button for the current player
+    const totalBtn = document.getElementById(`p${currentPlayer}_total_button`);
+    if (totalBtn) {
+        totalBtn.textContent = scoresLocked.total;
+    }
+}
 
     if (areAllScoresLocked()) {
         const gameOverScreen = document.getElementById("game-over-screen");
         gameOverScreen.style.display = "block";
         const totalScoreDisplay = document.getElementById("total-score-display");
-        totalScoreDisplay.textContent = `You scored ${scoresLocked.total}`;
+        totalScoreDisplay.textContent =
+            `Player 1: ${scoresLockedP1.total} | Player 2: ${scoresLockedP2.total}`;
         const whiteOverlay = document.getElementById("background-overlay");
         whiteOverlay.style.display = "block";
+        return; // End game, don't switch player
     }
 
     // Unlock and update cards after locking a score
@@ -355,6 +417,29 @@ function lockButton(event) {
         }
     });
 
+    // Reset unlocked scores to 0
+    const scoreKeys = [
+    "ones", "twos", "threes", "fours", "fives", "sixes",
+    "duo", "triple", "quad", "den_o_wolf", "dragon_claw",
+    "yar", "straight", "full_house", "chance", //"total"
+    ];
+    scoreKeys.forEach(key => {
+        const btn = document.getElementById(`p${currentPlayer}_${key}_button`);
+        if (btn && btn.getAttribute("data-locked") !== "true") {
+            btn.textContent = 0;
+        }
+    });
+
+    // Switch to the other player
+    currentPlayer = currentPlayer === 1 ? 2 : 1;
+
+    // After switching currentPlayer
+    const currentPlayerLabel = document.getElementById("current-player-label");
+    if (currentPlayerLabel) {
+        currentPlayerLabel.textContent = `Current Player: Player ${currentPlayer}`;
+    }
+
+    updateScoreButtonStates(); 
     updateCardImages();
     cardTotals();
     updateScores();
@@ -362,7 +447,7 @@ function lockButton(event) {
     rerollCount = 0;
     const element = document.getElementById("reroll_count");
     element.textContent = 3 - rerollCount;
-    console.log("Reroll counter reset.");
+    console.log(`Player ${currentPlayer}'s turn!`);
 }
 
 var rerollCount = 0;
@@ -391,19 +476,24 @@ window.onload = () => {
     updateCardImages();
     cardTotals();
     updateScores();
+    updateScoreButtonStates(); 
+
     const element = document.getElementById("reroll_count");
     element.textContent = 3 - rerollCount;
 
     // Score button listeners
-    const scoreIds = [
-        "ones_button", "twos_button", "threes_button", "fours_button", "fives_button", "sixes_button",
-        "duo_button", "triple_button", "quad_button", "den_o_wolf_button", "dragon_claw_button",
-        "yar_button", "straight_button", "full_house_button", "chance_button"
+    const scoreKeys = [
+    "ones", "twos", "threes", "fours", "fives", "sixes",
+    "duo", "triple", "quad", "den_o_wolf", "dragon_claw",
+    "yar", "straight", "full_house", "chance", "total"
     ];
-    scoreIds.forEach(id => {
-        const button = document.getElementById(id);
+
+    scoreKeys.forEach(key => {
+    [1, 2].forEach(playerNum => {
+        const button = document.getElementById(`p${playerNum}_${key}_button`);
         if (button) button.addEventListener("click", lockButton);
     });
+});
 
     // Card button listeners
     const cardIds = ["card1", "card2", "card3", "card4", "card5"];
@@ -435,9 +525,14 @@ document.getElementById("reset-game-button").addEventListener("click", () => {
     const whiteOverlay = document.getElementById("background-overlay");
     whiteOverlay.style.display = "none";
 
-    for (const key in scoresLocked) {
-        if (key !== "total") scoresLocked[key] = false;
-        else scoresLocked[key] = 0;
+    // Reset both players' scoresLocked
+    for (const key in scoresLockedP1) {
+        if (key !== "total") scoresLockedP1[key] = false;
+        else scoresLockedP1[key] = 0;
+    }
+    for (const key in scoresLockedP2) {
+        if (key !== "total") scoresLockedP2[key] = false;
+        else scoresLockedP2[key] = 0;
     }
 
     const cardIds = ["card1", "card2", "card3", "card4", "card5"];
@@ -445,20 +540,24 @@ document.getElementById("reset-game-button").addEventListener("click", () => {
         lockedCards[id] = false;
     });
 
-    const scoreIds = [
-        "ones_button", "twos_button", "threes_button", "fours_button", "fives_button", "sixes_button",
-        "duo_button", "triple_button", "quad_button", "den_o_wolf_button", "dragon_claw_button",
-        "yar_button", "straight_button", "full_house_button", "chance_button"
+    // Unlock all score buttons for both players
+    const scoreKeys = [
+        "ones", "twos", "threes", "fours", "fives", "sixes",
+        "duo", "triple", "quad", "den_o_wolf", "dragon_claw",
+        "yar", "straight", "full_house", "chance"
     ];
-    scoreIds.forEach((id) => {
-        const button = document.getElementById(id);
-        if (button) {
-            button.setAttribute("data-locked", "false");
-            button.style.backgroundColor = "";
-            button.addEventListener("click", lockButton);
-        }
+    [1, 2].forEach(playerNum => {
+        scoreKeys.forEach((key) => {
+            const button = document.getElementById(`p${playerNum}_${key}_button`);
+            if (button) {
+                button.setAttribute("data-locked", "false");
+                button.style.backgroundColor = "";
+                button.addEventListener("click", lockButton);
+            }
+        });
     });
 
+    currentPlayer = 1;
     updateCardImages();
     cardTotals();
     updateScores();

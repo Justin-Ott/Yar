@@ -123,6 +123,23 @@ main {
   font-size: 1rem;
 }
 
+.current-player-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem 0 0.5rem 0;
+}
+
+#current-player-label {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #3498DB;
+  background: #fff;
+  padding: 0.5rem 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.07);
+}
+
 .scores-container {
   display: grid;
   grid-template-columns: repeat(1, 1fr); /* Columns for scores */
@@ -145,6 +162,64 @@ main {
   width: 100%; /* All items have the same width */
   box-sizing: border-box;
   font-size: 1rem;
+}
+
+.scoreboard-table {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  background-color: #ffffff; /* From .score */
+  border-radius: 4px;        /* From .score */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* From .score */
+  overflow: hidden;
+  margin: 2rem auto;
+  width: max-content;
+  min-width: 350px;
+  border: 1px solid #ffffff; /* From .score */
+  color: #333333;            /* From .score */
+  font-size: 1rem;           /* From .score */
+}
+
+.scoreboard-row {
+  display: contents;
+}
+
+.scoreboard-cell {
+  border-bottom: 1px solid #eee;
+  border-right: 1px solid #eee;
+  padding: 4px;              /* From .score */
+  text-align: center;
+  font-size: 1rem;
+  background-color: #ffffff; /* From .score */
+  color: #333333;            /* From .score */
+  box-sizing: border-box;    /* From .score */
+}
+
+.scoreboard-row:last-child .scoreboard-cell {
+  border-bottom: none;
+}
+
+.scoreboard-cell:last-child {
+  border-right: none;
+}
+
+.header-row .scoreboard-cell {
+  background: #3498DB;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.1rem;
+  border-bottom: 2px solid #3498DB;
+}
+
+.scoreboard-cell button {
+  min-width: 60px;
+  font-size: 1rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #3498DB;
+  background: #f5faff;
+  cursor: pointer;
+  color: #333333;            /* From .score */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* From .score */
 }
 
 .inline-content {
