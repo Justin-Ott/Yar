@@ -16,6 +16,17 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
+// At the top of yar.js
+const urlParams = new URLSearchParams(window.location.search);
+const gameMode = urlParams.get('mode') || 'duo'; // default to duo
+
+if (gameMode === 'solo') {
+    // Hide Player 2 UI elements
+    document.querySelector('.right-player').style.display = 'none';
+    // Adjust logic to only use Player 1
+    // (You may need to add checks throughout your code)
+}
+
 // Card image arrays
 const aceCards = [
     "Cards/ace_v_1.png", "Cards/ace_v_2.png", "Cards/ace_v_3.png", "Cards/ace_v_4.png", "Cards/ace_v_5.png"
@@ -431,7 +442,12 @@ function lockButton(event) {
     });
 
     // Switch to the other player
-    currentPlayer = currentPlayer === 1 ? 2 : 1;
+    // When switching players in solo mode, stay on Player 1
+    if (gameMode === 'solo') {
+        currentPlayer = 1;
+    } else {
+        currentPlayer = currentPlayer === 1 ? 2 : 1;
+    }
 
     // After switching currentPlayer
     const currentPlayerLabel = document.getElementById("current-player-label");
@@ -492,8 +508,8 @@ window.onload = () => {
     [1, 2].forEach(playerNum => {
         const button = document.getElementById(`p${playerNum}_${key}_button`);
         if (button) button.addEventListener("click", lockButton);
+        });
     });
-});
 
     // Card button listeners
     const cardIds = ["card1", "card2", "card3", "card4", "card5"];
@@ -501,6 +517,16 @@ window.onload = () => {
         const button = document.getElementById(id);
         if (button) button.addEventListener("click", lockCard);
     });
+
+    if (gameMode === 'solo') {
+        // Hide Player 2's UI elements
+        const rightPlayer = document.querySelector('.right-player');
+        if (rightPlayer) rightPlayer.style.display = 'none';
+
+        // Optionally, hide Player 2's score buttons/board
+        const p2Buttons = document.querySelectorAll('[id^="p2_"]');
+        p2Buttons.forEach(btn => btn.style.display = 'none');
+    }
 };
 
 // Reroll button

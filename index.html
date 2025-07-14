@@ -1,186 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <link rel="icon" href="Cards/ace_v_1.png" type="image/png">    <!--Put a propper photo here eventually-->
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="yar.css" />
-    <title>Yar</title>
-  </head>
-
-
+<head>
+  <meta charset="UTF-8" />
+  <title>Yar - Home</title>
+  <link rel="stylesheet" href="yar.css" />
+  <style>
+    body {
+      background: #e2e2e2;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    .home-container {
+      max-width: 400px;
+      margin: 4rem auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      padding: 2rem 2.5rem 2.5rem 2.5rem;
+      text-align: center;
+    }
+    .home-title {
+      color: #3498db;
+      margin-bottom: 0.5rem;
+    }
+    .home-desc {
+      color: #555;
+      margin-bottom: 2rem;
+      font-size: 1.1rem;
+    }
+    .home-btns button {
+      display: block;
+      width: 100%;
+      margin: 0.5rem 0;
+      padding: 0.8rem;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 6px;
+      background: #3498db;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .home-btns button:hover {
+      background: #217dbb;
+    }
+  </style>
+</head>
 <body>
-  <div class="layout">
-    <!-- 1. Header Row -->
-    <header>
-      <h1>Yar</h1>
-    </header>
-
-    <!-- 2. Players Row -->
-    <section class="players-row">
-      <section class="players-row">
-        <div class="player-box left-player">
-          <img class="player-icon" src="Cards/ace_v_1.png" alt="Player 1 Icon" />
-          <div class="player-info">
-            <span class="player-name">Player 1</span>
-            <span class="player-winrate">Win Rate: 75%</span>
-          </div>
-        </div>
-        <!-- Current Player Row -->
-      <div class="current-player-row">
-        <span id="current-player-label">Current Player: Player 1</span>
-      </div>
-        <div class="player-box right-player">
-          <img class="player-icon" src="Cards/ace_v_2.png" alt="Player 2 Icon" />
-          <div class="player-info">
-            <span class="player-name">Player 2</span>
-            <span class="player-winrate">Win Rate: 60%</span>
-          </div>
-        </div>
-      </section>
-    </section>
-
-    <!-- 3. Game Row (cards and score) -->
-    <main>
-      <div class="main-container">
-          <div class="scores-container">
-            <div class="scoreboard-table">
-              <div class="scoreboard-row header-row">
-                <div class="scoreboard-cell">Score</div>
-                <div class="scoreboard-cell">Player 1</div>
-                <div class="scoreboard-cell">Player 2</div>
-              </div>
-              <div class="scoreboard-row">
-                <div class="scoreboard-cell">Ones</div>
-                <div class="scoreboard-cell"><button id="p1_ones_button">0</button></div>
-                <div class="scoreboard-cell"><button id="p2_ones_button">0</button></div>
-              </div>
-              <div class="scoreboard-row">
-                <div class="scoreboard-cell">Twos</div>
-                <div class="scoreboard-cell"><button id="p1_twos_button">0</button></div>
-                <div class="scoreboard-cell"><button id="p2_twos_button">0</button></div>
-              </div>
-              <div class="scoreboard-row">
-                <div class="scoreboard-cell">Threes</div>
-                <div class="scoreboard-cell"><button id="p1_threes_button">0</button></div>
-                <div class="scoreboard-cell"><button id="p2_threes_button">0</button></div>
-              </div>
-              <div class="scoreboard-row">
-                <div class="scoreboard-cell">Fours</div>
-                <div class="scoreboard-cell"><button id="p1_fours_button">0</button></div>
-                <div class="scoreboard-cell"><button id="p2_fours_button">0</button></div>
-              </div>
-              <div class="scoreboard-row">
-                <div class="scoreboard-cell">Fives</div>
-                <div class="scoreboard-cell"><button id="p1_fives_button">0</button></div>
-                <div class="scoreboard-cell"><button id="p2_fives_button">0</button></div>
-              </div>
-              <div class="scoreboard-row">
-                <div class="scoreboard-cell">Sixes</div>
-                <div class="scoreboard-cell"><button id="p1_sixes_button">0</button></div>
-                <div class="scoreboard-cell"><button id="p2_sixes_button">0</button></div>
-              </div>
-              <div class="scoreboard-row">
-                <div class="scoreboard-cell">Duo</div>
-                <div class="scoreboard-cell"><button id="p1_duo_button">0</button></div>
-                <div class="scoreboard-cell"><button id="p2_duo_button">0</button></div>
-              </div>
-              <div class="scoreboard-row">
-                <div class="scoreboard-cell">Triple</div>
-                <div class="scoreboard-cell"><button id="p1_triple_button">0</button></div>
-                <div class="scoreboard-cell"><button id="p2_triple_button">0</button></div>
-              </div>
-              <div class="scoreboard-row">
-                <div class="scoreboard-cell">Quad</div>
-                <div class="scoreboard-cell"><button id="p1_quad_button">0</button></div>
-                <div class="scoreboard-cell"><button id="p2_quad_button">0</button></div>
-              </div>
-              <div class="scoreboard-row">
-                <div class="scoreboard-cell">Den o Wolf</div>
-                <div class="scoreboard-cell"><button id="p1_den_o_wolf_button">0</button></div>
-                <div class="scoreboard-cell"><button id="p2_den_o_wolf_button">0</button></div>
-              </div>
-              <div class="scoreboard-row">
-                <div class="scoreboard-cell">Dragon Claw</div>
-                <div class="scoreboard-cell"><button id="p1_dragon_claw_button">0</button></div>
-                <div class="scoreboard-cell"><button id="p2_dragon_claw_button">0</button></div>
-              </div>
-              <div class="scoreboard-row">
-                <div class="scoreboard-cell">Yar</div>
-                <div class="scoreboard-cell"><button id="p1_yar_button">0</button></div>
-                <div class="scoreboard-cell"><button id="p2_yar_button">0</button></div>
-              </div>
-              <div class="scoreboard-row">
-                <div class="scoreboard-cell">Straight</div>
-                <div class="scoreboard-cell"><button id="p1_straight_button">0</button></div>
-                <div class="scoreboard-cell"><button id="p2_straight_button">0</button></div>
-              </div>
-              <div class="scoreboard-row">
-                <div class="scoreboard-cell">Full House</div>
-                <div class="scoreboard-cell"><button id="p1_full_house_button">0</button></div>
-                <div class="scoreboard-cell"><button id="p2_full_house_button">0</button></div>
-              </div>
-              <div class="scoreboard-row">
-                <div class="scoreboard-cell">Chance</div>
-                <div class="scoreboard-cell"><button id="p1_chance_button">0</button></div>
-                <div class="scoreboard-cell"><button id="p2_chance_button">0</button></div>
-              </div>
-              <div class="scoreboard-row">
-                <div class="scoreboard-cell">Total</div>
-                <div class="scoreboard-cell"><button id="p1_total_button">0</button></div>
-                <div class="scoreboard-cell"><button id="p2_total_button">0</button></div>
-              </div>
-            </div>
-            </div>
-            <div class="cards-container">
-              <!--Class containing all of the Card base pngs-->
-              <div class="cards-png">
-                <button id="card1">
-                  <img src="Cards/two_v_1.png" value="2" draggable="false"/>
-                </button>
-              </div>
-              <div class="cards-png">
-                <button id="card2">
-                  <img src="Cards/two_v_1.png" value="3" draggable="false"/>
-                </button>
-              </div>
-              <div class="cards-png">
-                <button id="card3">
-                  <img src="Cards/two_v_1.png" value="4" draggable="false"/>
-                </button>
-              </div>
-              <div class="cards-png">
-                <button id="card4">
-                  <img src="Cards/two_v_1.png" value="5" draggable="false"/>
-                </button>
-              </div>
-              <div class="cards-png">
-                <button id="card5">
-                  <img src="Cards/two_v_1.png" value="6" draggable="false"/>
-                </button>
-              </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- 4. Reroll Row -->
-    <div class="reroll-container">
-      <button type="button" id="reroll" class="reroll">Reroll unlocked</button>
-      <button type="button" id="reroll_count" class="reroll"></button>
+  <div class="home-container">
+    <h1 class="home-title">Welcome to Yar!</h1>
+    <div class="home-desc">
+      The card game of strategy and luck.<br>
+      Choose a mode to begin:
     </div>
-
-    <!-- 5. Footer Row -->
-    <footer>
-      <p>© 2025 Justin Ott. All rights reserved.</p>
-    </footer>
+    <div class="home-btns">
+      <button onclick="window.location.href='yar.html?mode=solo'">1 Player (Solo)</button>
+      <button onclick="window.location.href='yar.html?mode=duo'">2 Player (Local)</button>
+      <button onclick="window.location.href='leaderboard.html'">Leaderboards</button>
+      <!-- Future: <button>Login / Register</button> -->
+    </div>
   </div>
-
-  <div id="game-over-screen" style="display: none;">
-    <h1>Game Over!</h1>
-    <p>All scores have been locked.</p>
-    <p id="total-score-display">You scored [total]</p>
-    <button id="reset-game-button">Play Again</button>
-  </div>
-  <div id="background-overlay" style="display: none;"></div>
-  <script type="module" src="yar.js"></script>
 </body>
+</html>
