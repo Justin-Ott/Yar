@@ -92,7 +92,6 @@ function updateCardImages() {
 }
 
 
-
 // Assign card values based on image src
 function cardTotals() {
     const cardIds = ["card1", "card2", "card3", "card4", "card5"];
@@ -145,6 +144,9 @@ function areAllScoresLocked() {
     const allLocked = (scoresObj) => Object.keys(scoresObj).every(
         key => key === "total" || scoresObj[key] !== false
     );
+    if (gameMode === 'solo') {
+        return allLocked(scoresLockedP1);
+    }
     return allLocked(scoresLockedP1) && allLocked(scoresLockedP2);
 }
 
@@ -404,15 +406,31 @@ function lockButton(event) {
 }
 
     if (areAllScoresLocked()) {
-        const gameOverScreen = document.getElementById("game-over-screen");
-        gameOverScreen.style.display = "block";
-        const totalScoreDisplay = document.getElementById("total-score-display");
+    const gameOverScreen = document.getElementById("game-over-screen");
+    const totalScoreDisplay = document.getElementById("total-score-display");
+    const whiteOverlay = document.getElementById("background-overlay");
+
+    gameOverScreen.style.display = "block";
+    whiteOverlay.style.display = "block";
+
+    if (gameMode === 'solo') {
+        // Solo mode end screen
+        totalScoreDisplay.textContent = `Your Final Score: ${scoresLockedP1.total}`;
+    } else {
+        // 2-player mode end screen
         totalScoreDisplay.textContent =
             `Player 1: ${scoresLockedP1.total} | Player 2: ${scoresLockedP2.total}`;
-        const whiteOverlay = document.getElementById("background-overlay");
-        whiteOverlay.style.display = "block";
-        return; // End game, don't switch player
+        // Optionally, show winner
+        if (scoresLockedP1.total > scoresLockedP2.total) {
+            totalScoreDisplay.textContent += "\nWinner: Player 1";
+        } else if (scoresLockedP2.total > scoresLockedP1.total) {
+            totalScoreDisplay.textContent += "\nWinner: Player 2";
+        } else {
+            totalScoreDisplay.textContent += "\nIt's a tie!";
+        }
     }
+    return; // End game, don't switch player
+}
 
     // Unlock and update cards after locking a score
     const cardIds = ["card1", "card2", "card3", "card4", "card5"];
@@ -553,24 +571,23 @@ document.getElementById("reset-game-button").addEventListener("click", () => {
 
     // Reset both players' scoresLocked
     for (const key in scoresLockedP1) {
-        if (key !== "total") scoresLockedP1[key] = false;
-        else scoresLockedP1[key] = 0;
+        scoresLockedP1[key] = key === "total" ? 0 : false;
     }
     for (const key in scoresLockedP2) {
-        if (key !== "total") scoresLockedP2[key] = false;
-        else scoresLockedP2[key] = 0;
+        scoresLockedP2[key] = key === "total" ? 0 : false;
     }
 
+    // Reset card lock state
     const cardIds = ["card1", "card2", "card3", "card4", "card5"];
     cardIds.forEach((id) => {
         lockedCards[id] = false;
     });
 
-    // Unlock all score buttons for both players
+    // Unlock all score buttons and reset their text
     const scoreKeys = [
         "ones", "twos", "threes", "fours", "fives", "sixes",
         "duo", "triple", "quad", "den_o_wolf", "dragon_claw",
-        "yar", "straight", "full_house", "chance"
+        "yar", "straight", "full_house", "chance", "total"
     ];
     [1, 2].forEach(playerNum => {
         scoreKeys.forEach((key) => {
@@ -578,17 +595,44 @@ document.getElementById("reset-game-button").addEventListener("click", () => {
             if (button) {
                 button.setAttribute("data-locked", "false");
                 button.style.backgroundColor = "";
+                button.disabled = false;
+                button.style.opacity = "1";
+                button.style.pointerEvents = "auto";
+                button.textContent = "0";
                 button.addEventListener("click", lockButton);
             }
         });
     });
 
-    currentPlayer = 1;
-    updateCardImages();
-    cardTotals();
-    updateScores();
+    // Reset total buttons
+    const totalBtn1 = document.getElementById("p1_total_button");
+    if (totalBtn1) totalBtn1.textContent = "0";
+    const totalBtn2 = document.getElementById("p2_total_button");
+    if (totalBtn2) totalBtn2.textContent = "0";
 
+    // Reset current player and UI label
+    currentPlayer = 1;
+    const currentPlayerLabel = document.getElementById("current-player-label");
+    if (currentPlayerLabel) {
+        currentPlayerLabel.textContent = `Current Player: Player ${currentPlayer}`;
+    }
+
+    // Reset reroll count
     rerollCount = 0;
     const element = document.getElementById("reroll_count");
     element.textContent = 3 - rerollCount;
+
+    // Reset cards and scores
+    updateCardImages();
+    cardTotals();
+    updateScores();
+    updateScoreButtonStates();
+
+    // Hide Player 2 UI if in solo mode
+    if (gameMode === 'solo') {
+        const rightPlayer = document.querySelector('.right-player');
+        if (rightPlayer) rightPlayer.style.display = 'none';
+        const p2Buttons = document.querySelectorAll('[id^="p2_"]');
+        p2Buttons.forEach(btn => btn.style.display = 'none');
+    }
 });
