@@ -104,7 +104,7 @@ main {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 0.5rem 0.5rem;
   background: #e0e0e0;
 }
 
@@ -162,7 +162,7 @@ main {
 .scores-container {
   display: grid;
   grid-template-columns: repeat(1, 1fr); /* Columns for scores */
-  gap: 1rem;
+  gap: 0.5rem;
 }
 
 .score {
@@ -186,11 +186,11 @@ main {
 .scoreboard-table {
   display: grid;
   grid-template-columns: 1.5fr 1fr 1fr;
-  background-color: #ffffff; /* From .score */
-  border-radius: 4px;        /* From .score */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* From .score */
+  background-color: #ffffff;
+  border-radius: 2px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  margin: 2rem auto;
+  margin: 1rem auto;
   width: max-content;
   min-width: 350px;
   border: 1px solid #ffffff; /* From .score */
@@ -205,7 +205,7 @@ main {
 .scoreboard-cell {
   border-bottom: 1px solid #eee;
   border-right: 1px solid #eee;
-  padding: 4px;              /* From .score */
+  padding: 1px;              /* From .score */
   text-align: center;
   font-size: 1rem;
   background-color: #ffffff; /* From .score */
@@ -225,16 +225,16 @@ main {
   background: #3498DB;
   color: #fff;
   font-weight: bold;
-  font-size: 1.1rem;
+  font-size: 1rem;
   border-bottom: 2px solid #3498DB;
 }
 
 .scoreboard-cell button {
   min-width: 60px;
   font-size: 1rem;
-  padding: 0.25rem 0.5rem;
-  border-radius: 6px;
-  border: 1px solid #3498DB;
+  padding: 0.1rem 0.1rem;
+  border-radius: 2px;
+  border: 2px solid #3498DB;
   background: #f5faff;
   cursor: pointer;
   color: #333333;            /* From .score */
